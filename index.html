@@ -159,6 +159,18 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
 .sneeze{transform-box:fill-box;transform-origin:center;animation:sneeze 5s ease-in-out infinite}
 @keyframes sneeze{0%,82%,100%{transform:none}84%{transform:translateX(-3px) scale(1.04,.96)}86%{transform:translateX(4px) scale(.96,1.04)}88%{transform:translateX(-4px)}90%{transform:translateX(3px) scale(1.03,.97)}93%{transform:none}}
 @media (prefers-reduced-motion: reduce){.wink,.wave,.sneeze{animation:none}}
+/* Text adverts: silent, looping, one line on screen at a time. */
+.adverts{padding-block:40px}
+.advert-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:20px}
+.advert{margin:0;min-width:0}
+.advert-frame{position:relative;aspect-ratio:16/9;max-width:100%;border-radius:12px;overflow:hidden;background:#173B24;color:#FFF7D6}
+.advert-mem .advert-frame{background:#FFCE2E;color:#173B24}
+.scene{position:absolute;inset:0;margin:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px 18px;font-weight:800;font-size:clamp(17px,3.6vw,26px);line-height:1.25;text-wrap:balance;opacity:0;animation:scene 12s infinite}
+.scene.s1{animation-delay:0s}.scene.s2{animation-delay:3s}.scene.s3{animation-delay:6s}.scene.s4{animation-delay:9s}
+@keyframes scene{0%{opacity:0}3%{opacity:1}22%{opacity:1}25%{opacity:0}100%{opacity:0}}
+.advert figcaption{margin-top:8px;font-size:14px;font-weight:700}
+@media (max-width:640px){.advert-grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion: reduce){.scene{animation:none;opacity:0}.scene.s1{opacity:1}}
 </style>
 </head>
 <body>
@@ -211,6 +223,30 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
       <li>Members are checked by UK mobile, UK address, UK connection and bank account name. No photos, no selfies.</li>
       <li>Wildlife is the cause behind the story. We are building a way for members to give from their earnings to UK wildlife and conservation charities.</li>
     </ul>
+  </section>
+  <section class="wrap adverts">
+    <h2>Two short adverts</h2>
+    <p class="lede">Silent, and they loop. Each line stays on screen for three seconds.</p>
+    <div class="advert-grid">
+      <figure class="advert advert-biz" role="img" aria-label="Advert for businesses: consumer audits">
+        <div class="advert-frame">
+        <p class="scene s1">Need to know what UK adults really think?</p>
+        <p class="scene s2">A ZooSay consumer audit gets answers from real people, fast.</p>
+        <p class="scene s3">Your Pre-funded Research Credits pay for each response.</p>
+        <p class="scene s4">You review each response. If you do nothing, it is approved after 14 days.</p>
+        </div>
+        <figcaption>For businesses</figcaption>
+      </figure>
+      <figure class="advert advert-mem" role="img" aria-label="Advert for members: surveys">
+        <div class="advert-frame">
+        <p class="scene s1">Got an opinion? Get paid for it.</p>
+        <p class="scene s2">ZooSay surveys pay in real cash: 12p for every estimated minute.</p>
+        <p class="scene s3">Cash out from £10 by PayPal or UK bank transfer.</p>
+        <p class="scene s4">Join the waiting list. Opening soon.</p>
+        </div>
+        <figcaption>For members</figcaption>
+      </figure>
+    </div>
   </section>
 </main>
 

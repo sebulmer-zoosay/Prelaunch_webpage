@@ -50,6 +50,14 @@ main { padding-block: 2.5rem 1rem; }
 .links { margin: 2.25rem 0 0; padding: 0; list-style: none; display:flex; flex-wrap:wrap; gap:.6rem; }
 .links a { display:inline-flex; align-items:center; min-height:2.75rem; padding:.45rem 1.1rem; border-radius:999px; background:var(--jungle); color:var(--white); font-weight:800; text-decoration:none; }
 .links a.ghost { background: transparent; color: var(--jungle); border: 2px solid var(--jungle); }
+.heart { margin-top: 2.25rem; }
+.heart h2 { font-family:var(--display); font-weight:800; font-size:1.5rem; color:var(--jungle); margin:0 0 .5rem; }
+.heart > p { margin:.6rem 0 1.25rem; }
+.pillars { margin:0; padding:0; list-style:none; display:grid; gap:.9rem; }
+.pillars li { display:grid; grid-template-columns:3.25rem 1fr; gap:1rem; align-items:start; background:var(--white); border:2px solid var(--ink); border-radius:1.25rem; padding:1rem 1.1rem; }
+.pillars .letter { font-family:var(--display); font-weight:800; font-size:2.4rem; line-height:1; color:var(--leaf-dark); }
+.pillars strong { display:block; font-family:var(--display); font-weight:800; font-size:1.25rem; color:var(--jungle); line-height:1.1; }
+.pillars span.text { display:block; margin-top:.25rem; }
 a:focus-visible { outline:3px solid var(--tangerine); outline-offset:3px; border-radius:6px; }
 footer { background: var(--jungle); color: var(--white); padding-block: 2rem 2.5rem; font-size: .95rem; }
 footer a { color: var(--sun); font-weight:800; }
@@ -86,6 +94,18 @@ footer p { margin: .5rem 0; }
     <span class="tag">Our goal</span>
     <h2 id="goal-h">What we are working towards</h2>
     <p>To open to members and businesses on 31 January 2027, with real surveys and real money, and to launch publicly in the first quarter of 2027.</p>
+  </section>
+
+  <section class="heart" aria-labelledby="heart-h">
+    <h2 id="heart-h">How we work: HEART</h2>
+    <p>Five values guide everything we do, from how we pay members to how we look after our animals.</p>
+    <ol class="pillars">
+      <li><span class="letter" aria-hidden="true">H</span><div><strong>Honest</strong><span class="text">We say plainly what we pay, what we do and what we cannot promise.</span></div></li>
+      <li><span class="letter" aria-hidden="true">E</span><div><strong>Earnest</strong><span class="text">We mean what we say. Members are paid fairly and sincerely for real opinions.</span></div></li>
+      <li><span class="letter" aria-hidden="true">A</span><div><strong>Animal-kind</strong><span class="text">Our animals are cared for and set free, and we treat members with the same care.</span></div></li>
+      <li><span class="letter" aria-hidden="true">R</span><div><strong>Respectful</strong><span class="text">We respect every member's time, opinions and privacy.</span></div></li>
+      <li><span class="letter" aria-hidden="true">T</span><div><strong>Trusted</strong><span class="text">UK only and real people, verified, so businesses and members can rely on us.</span></div></li>
+    </ol>
   </section>
 
   <section class="why" aria-labelledby="why-h">

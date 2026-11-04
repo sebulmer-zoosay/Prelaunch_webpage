@@ -138,6 +138,8 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
 .field.bad input,.field.bad textarea{border-color:#A32D2D}
 .small{font-size:.9rem;color:var(--muted);margin-top:1rem}
 .done{display:none}
+.form-err{color:#A32D2D;font-weight:700;font-size:.95rem;margin-top:.75rem}
+.form-err a{color:#A32D2D}
 .sent .form-body{display:none}
 .sent .done{display:block}
 .done p{margin-top:.75rem}
@@ -359,14 +361,13 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
       </div>
       <label class="check"><input type="checkbox" name="marketing"><span>Also send me ZooSay news and offers by email. You can unsubscribe at any time.</span></label>
       <button class="btn btn-jungle" type="submit">Join the waiting list</button>
-      <p class="small" data-mailnote>This opens an email to help@zoosay.co.uk with your details filled in. Press send to finish.</p>
+      <p class="form-err" role="alert" data-form-err hidden></p>
       <p class="small">ZooSay is for UK residents aged 18 or over. We use your email only to tell you when we open, and delete it if you ask, or 12 months after launch if you have not joined.</p>
     </div>
     <div class="done" role="status">
-      <p data-done-mail>Your email app should have opened with your details ready. Press send and you are on the list.</p>
-      <p data-done-mail>Nothing opened? Email <a href="mailto:help@zoosay.co.uk">help@zoosay.co.uk</a> and ask to join the waiting list.</p>
-      <p data-done-api hidden>Thank you, you are on the waiting list. We will be in touch when ZooSay opens.</p>
-      <p data-done-api hidden>To see how we use your details and your rights, read our <a href="https://zoosay.co.uk/privacy">privacy notice</a>.</p>
+      <p>Thank you, you are on the waiting list. We will be in touch when ZooSay opens.</p>
+      <p>We have sent a confirmation to your email. If you cannot see it, check your junk or spam folder.</p>
+      <p>To see how we use your details and your rights, read our <a href="https://zoosay.co.uk/privacy">privacy notice</a>.</p>
       <button class="btn btn-jungle" type="button" data-close>Close</button>
     </div>
   </form>
@@ -402,14 +403,13 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
       <label class="check"><input type="checkbox" name="call"><span>I would like a call or video chat.</span></label>
       <label class="check"><input type="checkbox" name="marketing"><span>Also send me ZooSay research tips and product updates by email. You can unsubscribe at any time.</span></label>
       <button class="btn btn-jungle" type="submit">Send enquiry</button>
-      <p class="small" data-mailnote>This opens an email to help@zoosay.co.uk with your details filled in. Press send to finish.</p>
+      <p class="form-err" role="alert" data-form-err hidden></p>
       <p class="small">We use these details only to reply to your enquiry, and delete them if you ask.</p>
     </div>
     <div class="done" role="status">
-      <p data-done-mail>Your email app should have opened with your enquiry ready. Press send and we will be in touch.</p>
-      <p data-done-mail>Nothing opened? Email <a href="mailto:help@zoosay.co.uk">help@zoosay.co.uk</a> with your enquiry.</p>
-      <p data-done-api hidden>Thank you, your enquiry has been sent. We will be in touch.</p>
-      <p data-done-api hidden>To see how we use your details and your rights, read our <a href="https://zoosay.co.uk/privacy">privacy notice</a>.</p>
+      <p>Thank you, your enquiry has been sent. We reply Monday to Friday, 8am to 8pm.</p>
+      <p>We have sent a confirmation to your email. If you cannot see it, check your junk or spam folder.</p>
+      <p>To see how we use your details and your rights, read our <a href="https://zoosay.co.uk/privacy">privacy notice</a>.</p>
       <button class="btn btn-jungle" type="button" data-close>Close</button>
     </div>
   </form>
@@ -417,20 +417,28 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
 
 <script>
 /*
-  Where sign-ups go.
-  Leave WAITLIST_ENDPOINT empty and each form opens a pre-filled email to help@zoosay.co.uk.
-  When the waiting list table is live, set WAITLIST_ENDPOINT to the URL that accepts a JSON POST
-  with: audience, email, postcode_outcode, contact_name, company, message, wants_call, marketing_opt_in.
+  Where sign-ups go: the live sign-up service, which saves them straight into the
+  ZooSay database and sends the thank-you email (docs/live-waitlist.md in the app repository).
+  It accepts a JSON POST with: audience, email, postcode_outcode, contact_name, company,
+  message, wants_call, marketing_opt_in. Nothing opens an email any more.
+  The service sleeps when idle, so the page wakes it as soon as it loads.
 */
 var WAITLIST_ENDPOINT = "https://zoosay-live-waitlist.onrender.com/api/waitlist";
+var WAKE_URL = "https://zoosay-live-waitlist.onrender.com/holding";
 var CONTACT = "help@zoosay.co.uk";
 
 (function () {
   var emailOk = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
   var outcodeOk = function (v) { return v === "" || /^[A-Z]{1,2}[0-9][A-Z0-9]?$/.test(v); };
 
+  var wake = function () {
+    try { fetch(WAKE_URL, { mode: "no-cors", cache: "no-store" }).catch(function () {}); } catch (e) {}
+  };
+  wake();
+
   document.querySelectorAll("[data-open]").forEach(function (b) {
     b.addEventListener("click", function () {
+      wake();
       var d = document.getElementById(b.getAttribute("data-open"));
       d.querySelector("form").classList.remove("sent");
       if (d.showModal) { d.showModal(); } else { d.setAttribute("open", ""); }
@@ -442,10 +450,6 @@ var CONTACT = "help@zoosay.co.uk";
     });
     d.addEventListener("click", function (e) { if (e.target === d && d.close) { d.close(); } });
   });
-  if (WAITLIST_ENDPOINT) {
-    document.querySelectorAll("[data-mailnote]").forEach(function (n) { n.hidden = true; });
-  }
-
   function setBad(input, bad) {
     var f = input.closest(".field");
     if (f) { f.classList.toggle("bad", bad); }
@@ -484,37 +488,59 @@ var CONTACT = "help@zoosay.co.uk";
       }
       if (firstBad) { firstBad.focus(); return; }
 
-      var showDone = function (viaApi) {
-        form.querySelectorAll("[data-done-mail]").forEach(function (n) { n.hidden = viaApi; });
-        form.querySelectorAll("[data-done-api]").forEach(function (n) { n.hidden = !viaApi; });
-        form.classList.add("sent");
+      var errBox = form.querySelector("[data-form-err]");
+      var showErr = function (text) {
+        errBox.textContent = text + " ";
+        var a = document.createElement("a");
+        a.href = "mailto:" + CONTACT;
+        a.textContent = CONTACT;
+        errBox.appendChild(document.createTextNode("If it keeps happening, email "));
+        errBox.appendChild(a);
+        errBox.appendChild(document.createTextNode("."));
+        errBox.hidden = false;
       };
-      var viaEmail = function () {
-        var subject, lines;
-        if (kind === "business") {
-          subject = "Business enquiry: " + data.company;
-          lines = ["Name: " + data.contact_name, "Email: " + data.email, "Company: " + data.company,
-                   "Would like a call or video chat: " + (data.wants_call ? "Yes" : "No"),
-                   "Send research tips and product updates: " + (data.marketing_opt_in ? "Yes" : "No"),
-                   "", "Message:", data.message || "(none)"];
-        } else {
-          subject = "Join the ZooSay waiting list";
-          lines = ["Please add me to the ZooSay waiting list.", "", "Email: " + data.email,
-                   "Postcode area: " + (data.postcode_outcode || "(not given)"),
-                   "Send news and offers: " + (data.marketing_opt_in ? "Yes" : "No")];
-        }
-        window.location.href = "mailto:" + CONTACT + "?subject=" + encodeURIComponent(subject) +
-          "&body=" + encodeURIComponent(lines.join("\n"));
-        showDone(false);
-      };
+      errBox.hidden = true;
 
-      if (!WAITLIST_ENDPOINT) { viaEmail(); return; }
+      // One attempt, waiting up to 65 seconds in case the service is still waking up.
+      var attempt = function () {
+        var ctrl = window.AbortController ? new AbortController() : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 65000) : null;
+        return fetch(WAITLIST_ENDPOINT, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          signal: ctrl ? ctrl.signal : undefined
+        }).then(function (r) {
+          if (timer) { clearTimeout(timer); }
+          return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, body: j }; });
+        }, function () {
+          if (timer) { clearTimeout(timer); }
+          return { status: 0, body: {} };
+        });
+      };
+      var retryable = function (res) { return res.status === 0 || res.status >= 500; };
+
       var btn = form.querySelector("button[type=submit]");
+      var label = btn.textContent;
       btn.disabled = true;
-      fetch(WAITLIST_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) })
-        .then(function (r) { if (!r.ok) { throw new Error("failed"); } showDone(true); })
-        .catch(function () { viaEmail(); })
-        .then(function () { btn.disabled = false; });
+      btn.textContent = "Sending…";
+      attempt()
+        .then(function (res) {
+          if (!retryable(res)) { return res; }
+          return new Promise(function (ok) { setTimeout(ok, 3000); }).then(attempt);
+        })
+        .then(function (res) {
+          if (res.status >= 200 && res.status < 300 && res.body && res.body.ok) {
+            form.classList.add("sent");
+          } else if (res.status === 400 && res.body && res.body.error) {
+            showErr(res.body.error);
+          } else if (res.status === 429) {
+            showErr("Too many sign-ups from this connection. Please try again later.");
+          } else {
+            showErr("Sorry, that did not go through. Please try again in a minute.");
+          }
+        })
+        .then(function () { btn.disabled = false; btn.textContent = label; });
     });
   });
 })();

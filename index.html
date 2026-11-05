@@ -350,8 +350,9 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
     <div class="form-body">
       <p class="intro">We will email you once, the moment ZooSay opens.</p>
       <div class="field">
-        <label for="m-name">First name <span class="hint">(optional)</span></label>
-        <input id="m-name" name="first_name" type="text" autocomplete="given-name" maxlength="60">
+        <label for="m-name">First name</label>
+        <input id="m-name" name="first_name" type="text" autocomplete="given-name" maxlength="60" required>
+        <p class="err">Enter your first name.</p>
       </div>
       <div class="field">
         <label for="m-email">Email address</label>
@@ -359,9 +360,9 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
         <p class="err">Enter an email address, like name@example.co.uk.</p>
       </div>
       <div class="field">
-        <label for="m-outcode">First half of your postcode <span class="hint">(optional)</span></label>
-        <input id="m-outcode" name="outcode" type="text" autocomplete="off" maxlength="4" placeholder="DN2" style="max-width:9rem;text-transform:uppercase">
-        <p class="err">Enter only the first half, like DN2.</p>
+        <label for="m-outcode">First half of your postcode</label>
+        <input id="m-outcode" name="outcode" type="text" autocomplete="off" maxlength="4" placeholder="DN2" style="max-width:9rem;text-transform:uppercase" required>
+        <p class="err">Enter the first half of your postcode, like DN2.</p>
       </div>
       <label class="check"><input type="checkbox" name="marketing"><span>Also send me ZooSay news and offers by email. You can unsubscribe at any time.</span></label>
       <button class="btn btn-jungle" type="submit">Join the waiting list</button>
@@ -486,10 +487,12 @@ var CONTACT = "help@zoosay.co.uk";
         data.wants_call = el.call.checked;
       } else {
         var oc = el.outcode.value.trim().toUpperCase();
+        var fn = el.first_name.value.trim();
+        check(el.first_name, fn !== "" && /^[^<>@0-9]{1,60}$/.test(fn));
         check(el.email, emailOk(email));
-        check(el.outcode, outcodeOk(oc));
+        check(el.outcode, oc !== "" && outcodeOk(oc));
         data.postcode_outcode = oc;
-        data.first_name = el.first_name.value.trim();
+        data.first_name = fn;
       }
       if (firstBad) { firstBad.focus(); return; }
 

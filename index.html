@@ -402,8 +402,9 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
         <p class="err">Enter your company name.</p>
       </div>
       <div class="field">
-        <label for="b-message">What would you like to know? <span class="hint">(optional)</span></label>
-        <textarea id="b-message" name="message" maxlength="2000"></textarea>
+        <label for="b-message">What would you like to know?</label>
+        <textarea id="b-message" name="message" maxlength="2000" required></textarea>
+        <p class="err">Tell us what you would like to know.</p>
       </div>
       <label class="check"><input type="checkbox" name="call"><span>I would like a call or video chat.</span></label>
       <label class="check"><input type="checkbox" name="marketing"><span>Also send me ZooSay research tips and product updates by email. You can unsubscribe at any time.</span></label>
@@ -481,6 +482,7 @@ var CONTACT = "help@zoosay.co.uk";
         check(el.name, el.name.value.trim() !== "");
         check(el.email, emailOk(email));
         check(el.company, el.company.value.trim() !== "");
+        check(el.message, el.message.value.trim() !== "");
         data.contact_name = el.name.value.trim();
         data.company = el.company.value.trim();
         data.message = el.message.value.trim();

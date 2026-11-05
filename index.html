@@ -350,6 +350,10 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
     <div class="form-body">
       <p class="intro">We will email you once, the moment ZooSay opens.</p>
       <div class="field">
+        <label for="m-name">First name <span class="hint">(optional)</span></label>
+        <input id="m-name" name="first_name" type="text" autocomplete="given-name" maxlength="60">
+      </div>
+      <div class="field">
         <label for="m-email">Email address</label>
         <input id="m-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@example.co.uk" required>
         <p class="err">Enter an email address, like name@example.co.uk.</p>
@@ -362,7 +366,7 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
       <label class="check"><input type="checkbox" name="marketing"><span>Also send me ZooSay news and offers by email. You can unsubscribe at any time.</span></label>
       <button class="btn btn-jungle" type="submit">Join the waiting list</button>
       <p class="form-err" role="alert" data-form-err hidden></p>
-      <p class="small">ZooSay is for UK residents aged 18 or over. We use your email only to tell you when we open, and delete it if you ask, or 12 months after launch if you have not joined.</p>
+      <p class="small">ZooSay is for UK residents aged 18 or over. We use your name and email only to tell you when we open and, if you ask, to send news, and delete them if you ask, or 12 months after launch if you have not joined.</p>
     </div>
     <div class="done" role="status">
       <p>Thank you, you are on the waiting list. We will be in touch when ZooSay opens.</p>
@@ -485,6 +489,7 @@ var CONTACT = "help@zoosay.co.uk";
         check(el.email, emailOk(email));
         check(el.outcode, outcodeOk(oc));
         data.postcode_outcode = oc;
+        data.first_name = el.first_name.value.trim();
       }
       if (firstBad) { firstBad.focus(); return; }
 

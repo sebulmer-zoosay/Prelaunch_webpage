@@ -514,10 +514,10 @@ var CONTACT = "help@zoosay.co.uk";
       };
       errBox.hidden = true;
 
-      // One attempt, waiting up to 65 seconds in case the service is still waking up.
+      // Each attempt waits up to 90 seconds in case the service is still waking up.
       var attempt = function () {
         var ctrl = window.AbortController ? new AbortController() : null;
-        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 65000) : null;
+        var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 90000) : null;
         return fetch(WAITLIST_ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -537,12 +537,20 @@ var CONTACT = "help@zoosay.co.uk";
       var label = btn.textContent;
       btn.disabled = true;
       btn.textContent = "Sending…";
-      attempt()
+      // If the service is slow to wake, tell the person to keep the page open.
+      var slow = setTimeout(function () { btn.textContent = "Still sending, please wait…"; }, 6000);
+      var tries = 0;
+      var run = function () {
+        tries += 1;
+        return attempt().then(function (res) {
+          if (!retryable(res) || tries >= 3) { return res; }
+          wake();
+          return new Promise(function (ok) { setTimeout(ok, 5000); }).then(run);
+        });
+      };
+      run()
         .then(function (res) {
-          if (!retryable(res)) { return res; }
-          return new Promise(function (ok) { setTimeout(ok, 3000); }).then(attempt);
-        })
-        .then(function (res) {
+          clearTimeout(slow);
           if (res.status >= 200 && res.status < 300 && res.body && res.body.ok) {
             form.classList.add("sent");
           } else if (res.status === 400 && res.body && res.body.error) {

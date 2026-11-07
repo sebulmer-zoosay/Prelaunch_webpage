@@ -428,8 +428,10 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
 /*
   Where sign-ups go: the live sign-up service, which saves them straight into the
   ZooSay database and sends the thank-you email (docs/live-waitlist.md in the app repository).
-  It accepts a JSON POST with: audience, email, postcode_outcode, contact_name, company,
-  message, wants_call, marketing_opt_in. Nothing opens an email any more.
+  It accepts a plain web-form POST with: audience, email, first_name, postcode_outcode,
+  contact_name, company, message, wants_call, marketing_opt_in. If the page's script cannot
+  reach it, the browser sends the form itself (page=1) and the service shows a reply page.
+  Nothing opens an email any more.
   The service sleeps when idle, so the page wakes it as soon as it loads.
 */
 var WAITLIST_ENDPOINT = "https://zoosay-live-waitlist.onrender.com/api/waitlist";
@@ -439,6 +441,36 @@ var CONTACT = "help@zoosay.co.uk";
 (function () {
   var emailOk = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
   var outcodeOk = function (v) { return v === "" || /^[A-Z]{1,2}[0-9][A-Z0-9]?$/.test(v); };
+
+  var toForm = function (data) {
+    var p = [];
+    Object.keys(data).forEach(function (k) {
+      var v = data[k];
+      if (v === true) { v = "true"; } else if (v === false || v == null) { v = ""; }
+      p.push(encodeURIComponent(k) + "=" + encodeURIComponent(v));
+    });
+    return p.join("&");
+  };
+
+  // Last resort: the browser sends the form itself and shows the service's reply page.
+  var sendByBrowser = function (data) {
+    var f = document.createElement("form");
+    f.method = "POST";
+    f.action = WAITLIST_ENDPOINT;
+    f.style.display = "none";
+    var add = function (k, v) {
+      var i = document.createElement("input");
+      i.type = "hidden"; i.name = k; i.value = v;
+      f.appendChild(i);
+    };
+    Object.keys(data).forEach(function (k) {
+      var v = data[k];
+      add(k, v === true ? "true" : (v === false || v == null ? "" : String(v)));
+    });
+    add("page", "1");
+    document.body.appendChild(f);
+    f.submit();
+  };
 
   var wake = function () {
     try { fetch(WAKE_URL, { mode: "no-cors", cache: "no-store" }).catch(function () {}); } catch (e) {}
@@ -518,10 +550,11 @@ var CONTACT = "help@zoosay.co.uk";
       var attempt = function () {
         var ctrl = window.AbortController ? new AbortController() : null;
         var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 90000) : null;
+        // Sent as a plain web form, which every browser allows without a pre-check.
         return fetch(WAITLIST_ENDPOINT, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: toForm(data),
           signal: ctrl ? ctrl.signal : undefined
         }).then(function (r) {
           if (timer) { clearTimeout(timer); }
@@ -557,6 +590,12 @@ var CONTACT = "help@zoosay.co.uk";
             showErr(res.body.error);
           } else if (res.status === 429) {
             showErr("Too many sign-ups from this connection. Please try again later.");
+          } else if (res.status === 0) {
+            // The page's script could not reach the service at all (some apps' built-in
+            // browsers block it). Let the browser send the form itself; it opens a ZooSay
+            // page saying whether it worked.
+            sendByBrowser(data);
+            return;
           } else {
             showErr("Sorry, that did not go through. Please try again in a minute.");
           }

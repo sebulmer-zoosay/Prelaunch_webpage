@@ -131,9 +131,11 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
 .field{margin-top:1rem}
 .field label{display:block;font-weight:800;margin-bottom:.3rem}
 .field .hint{font-weight:400;color:var(--muted)}
-.field input[type=text],.field input[type=email],.field textarea{width:100%;font:inherit;color:var(--ink);background:var(--white);border:2px solid var(--muted);border-radius:.75rem;padding:.7rem .85rem}
+.field .opt{font-weight:400;color:var(--muted)}
+.field p.hint{font-size:.85rem;margin:.35rem 0 0}
+.field input[type=text],.field input[type=email],.field textarea,.field select{width:100%;font:inherit;color:var(--ink);background:var(--white);border:2px solid var(--muted);border-radius:.75rem;padding:.7rem .85rem}
 .field textarea{min-height:6.5rem;resize:vertical}
-.field input:focus-visible,.field textarea:focus-visible{outline:3px solid var(--leaf);outline-offset:1px;border-color:var(--leaf-dark)}
+.field input:focus-visible,.field textarea:focus-visible,.field select:focus-visible{outline:3px solid var(--leaf);outline-offset:1px;border-color:var(--leaf-dark)}
 .check{display:flex;gap:.7rem;align-items:flex-start;margin-top:1rem}
 .check input{width:1.4rem;height:1.4rem;margin-top:.15rem;flex:none;accent-color:var(--leaf-dark)}
 .err{display:none;color:#A32D2D;font-weight:700;font-size:.92rem;margin-top:.3rem}
@@ -367,10 +369,35 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
         <input id="m-outcode" name="outcode" type="text" autocomplete="off" maxlength="4" placeholder="DN2" style="max-width:9rem;text-transform:uppercase" required>
         <p class="err">Enter the first half of your postcode, like DN2.</p>
       </div>
+      <div class="field">
+        <label for="m-gender">Gender <span class="opt">(optional)</span></label>
+        <select id="m-gender" name="gender">
+          <option value="">Choose…</option>
+          <option value="woman">Woman</option>
+          <option value="man">Man</option>
+          <option value="non_binary">Non-binary</option>
+          <option value="another_way">I describe myself another way</option>
+          <option value="prefer_not_to_say">Prefer not to say</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="m-age">Age group <span class="opt">(optional)</span></label>
+        <select id="m-age" name="age_band">
+          <option value="">Choose…</option>
+          <option value="18-24">18–24</option>
+          <option value="25-34">25–34</option>
+          <option value="35-44">35–44</option>
+          <option value="45-54">45–54</option>
+          <option value="55-64">55–64</option>
+          <option value="65+">65 or over</option>
+          <option value="prefer_not_to_say">Prefer not to say</option>
+        </select>
+        <p class="hint">These help us match you with the right surveys and show businesses the mix of people on ZooSay, as totals only.</p>
+      </div>
       <label class="check"><input type="checkbox" name="marketing"><span>Also send me ZooSay news and offers by email. You can unsubscribe at any time.</span></label>
       <button class="btn btn-jungle" type="submit">Join the waiting list</button>
       <p class="form-err" role="alert" data-form-err hidden></p>
-      <p class="small">ZooSay is for UK residents aged 18 or over. We use your name and email only to tell you when we open and, if you ask, to send news, and delete them if you ask, or 12 months after launch if you have not joined.</p>
+      <p class="small">ZooSay is for UK residents aged 18 or over. We use your name and email only to tell you when we open and, if you ask, to send news (gender and age group, if you give them, are only counted in totals), and delete them if you ask, or 12 months after launch if you have not joined.</p>
     </div>
     <div class="done" role="status">
       <p>Thank you, you are on the waiting list. We will be in touch when ZooSay opens.</p>
@@ -429,7 +456,7 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
   Where sign-ups go: the live sign-up service, which saves them straight into the
   ZooSay database and sends the thank-you email (docs/live-waitlist.md in the app repository).
   It accepts a plain web-form POST with: audience, email, first_name, postcode_outcode,
-  contact_name, company, message, wants_call, marketing_opt_in. If the page's script cannot
+  contact_name, company, message, wants_call, marketing_opt_in, and optionally gender and age_band. If the page's script cannot
   reach it, the browser sends the form itself (page=1) and the service shows a reply page.
   Nothing opens an email any more.
   The service sleeps when idle, so the page wakes it as soon as it loads.
@@ -530,6 +557,8 @@ var CONTACT = "help@zoosay.co.uk";
         check(el.outcode, oc !== "" && outcodeOk(oc));
         data.postcode_outcode = oc;
         data.first_name = fn;
+        if (el.gender && el.gender.value) { data.gender = el.gender.value; }
+        if (el.age_band && el.age_band.value) { data.age_band = el.age_band.value; }
       }
       if (firstBad) { firstBad.focus(); return; }
 

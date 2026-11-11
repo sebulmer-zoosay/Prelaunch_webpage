@@ -20,9 +20,32 @@ th{background:#e8efe9}
 a{color:#0F4A2A}
 footer{max-width:46rem;margin:0 auto;padding:0 1.25rem 2rem;font-size:.9rem;color:#4a5a50}
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700;800&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+/* Shared top banner, the same look as the ZooSay app (owner request, 11 November 2026). */
+.zs-bar{padding:0;margin:0;background:radial-gradient(circle at 96% -20%,rgba(255,206,46,.26) 0 70px,transparent 71px),linear-gradient(135deg,#1c7a3a 0%,#0f4a2a 100%);color:#fff;border-radius:0 0 24px 24px;box-shadow:0 6px 18px rgba(15,74,42,.22);position:relative;z-index:5}
+.zs-bar-in{max-width:1100px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-left)) 14px;display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap}
+.zs-home{display:inline-flex;align-items:center;gap:10px;color:#fff;text-decoration:none}
+.zs-badge{width:46px;height:46px;border-radius:15px;background:#fff;display:grid;place-items:center;transform:rotate(-4deg);box-shadow:0 2px 0 rgba(0,0,0,.15);flex:none}
+.zs-badge svg{width:34px;height:34px}
+.zs-word{font-family:"Baloo 2","Trebuchet MS",system-ui,sans-serif;font-weight:800;font-size:1.75rem;line-height:1;letter-spacing:-.01em}
+.zs-word b{color:#FFCE2E;font-weight:800}
+.zs-word sup{font-size:.4em;vertical-align:top;position:relative;top:.3em;margin-left:2px;opacity:.85}
+.zs-nav{margin-left:auto;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+.zs-nav::-webkit-scrollbar{display:none}
+.zs-nav a{flex:none;color:#fff;text-decoration:none;font-family:"Nunito",system-ui,sans-serif;font-weight:800;font-size:.95rem;background:rgba(255,255,255,.13);border-radius:999px;padding:6px 13px;white-space:nowrap}
+.zs-nav a:hover,.zs-nav a[aria-current]{background:#FFCE2E;color:#173B24}
+@media (max-width:560px){.zs-nav{flex:1 1 100%;margin-left:0}}
+</style>
 </head>
 <body>
-<header><a href="/">ZooSay™</a></header>
+<header class="zs-bar"><div class="zs-bar-in">
+  <a class="zs-home" href="index.html" aria-label="ZooSay home"><span class="zs-badge"><svg xmlns="http://www.w3.org/2000/svg" viewBox="4 3.5 92 100" aria-hidden="true"><circle cx="30" cy="22" r="11" fill="#FFCE2E" stroke="#173B24" stroke-width="5"/><circle cx="70" cy="22" r="11" fill="#FFCE2E" stroke="#173B24" stroke-width="5"/><rect x="14" y="26" width="72" height="52" rx="18" fill="#FFCE2E" stroke="#173B24" stroke-width="5"/><path d="M32 78 L46 78 L28 96 Z" fill="#FFCE2E" stroke="#173B24" stroke-width="5" stroke-linejoin="round"/><circle cx="38" cy="48" r="5.5" fill="#3A2A1A"/><circle cx="62" cy="48" r="5.5" fill="#3A2A1A"/><path d="M40 62 Q50 70 60 62" stroke="#3A2A1A" stroke-width="5" fill="none" stroke-linecap="round"/></svg></span><span class="zs-word">Zoo<b>Say</b><sup>™</sup></span></a>
+  <nav class="zs-nav" aria-label="Main"><a href="about.html">About</a><a href="business.html">For business</a><a href="privacy.html" aria-current="page">Privacy</a><a href="mailto:help@zoosay.co.uk">Contact</a></nav>
+</div></header>
+
 <main>
 <h1>ZooSay privacy notice (version 1.7)</h1>
 <p>Version 1.7, 10 November 2026. Changes from version 1.6: the optional gender and age group questions on the waiting list, and our registered office address shown here.</p>

@@ -434,6 +434,18 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
         </select>
         <p class="hint">These help us match you with the right surveys and show businesses the mix of people on ZooSay, as totals only.</p>
       </div>
+      <div class="field">
+        <label for="m-channel">How did you hear about us? <span class="opt">(optional)</span></label>
+        <select id="m-channel" name="channel">
+          <option value="">Choose…</option>
+          <option value="instagram">Instagram</option>
+          <option value="facebook">Facebook</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="friend_family">A friend or family</option>
+          <option value="search">Search engine, like Google</option>
+          <option value="other">Somewhere else</option>
+        </select>
+      </div>
       <label class="check"><input type="checkbox" name="marketing"><span>Also send me ZooSay news and offers by email. You can unsubscribe at any time.</span></label>
       <button class="btn btn-jungle" type="submit">Join the waiting list</button>
       <p class="form-err" role="alert" data-form-err hidden></p>
@@ -476,6 +488,18 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
         <textarea id="b-message" name="message" maxlength="2000" required></textarea>
         <p class="err">Tell us what you would like to know.</p>
       </div>
+      <div class="field">
+        <label for="b-channel">How did you hear about us? <span class="opt">(optional)</span></label>
+        <select id="b-channel" name="channel">
+          <option value="">Choose…</option>
+          <option value="instagram">Instagram</option>
+          <option value="facebook">Facebook</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="friend_family">A friend or family</option>
+          <option value="search">Search engine, like Google</option>
+          <option value="other">Somewhere else</option>
+        </select>
+      </div>
       <label class="check"><input type="checkbox" name="call"><span>I would like a call or video chat.</span></label>
       <label class="check"><input type="checkbox" name="marketing"><span>Also send me ZooSay research tips and product updates by email. You can unsubscribe at any time.</span></label>
       <button class="btn btn-jungle" type="submit">Send enquiry</button>
@@ -496,7 +520,7 @@ dialog::backdrop{background:rgba(15,74,42,.75)}
   Where sign-ups go: the live sign-up service, which saves them straight into the
   ZooSay database and sends the thank-you email (docs/live-waitlist.md in the app repository).
   It accepts a plain web-form POST with: audience, email, first_name, postcode_outcode,
-  contact_name, company, message, wants_call, marketing_opt_in, and optionally gender and age_band. If the page's script cannot
+  contact_name, company, message, wants_call, marketing_opt_in, and optionally gender, age_band and channel (how they heard about us). If the page's script cannot
   reach it, the browser sends the form itself (page=1) and the service shows a reply page.
   Nothing opens an email any more.
   The service sleeps when idle, so the page wakes it as soon as it loads.
@@ -579,6 +603,7 @@ var CONTACT = "help@zoosay.co.uk";
       };
       var email = el.email.value.trim();
       var data = { audience: kind, email: email, marketing_opt_in: el.marketing.checked };
+      if (el.channel && el.channel.value) { data.channel = el.channel.value; }
 
       if (kind === "business") {
         check(el.name, el.name.value.trim() !== "");

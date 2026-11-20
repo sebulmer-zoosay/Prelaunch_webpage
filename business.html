@@ -241,6 +241,33 @@ footer .brand svg { width: 36px; }
   .ledger-row { grid-template-columns: 1fr 2fr; align-items: baseline; }
 }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+/* Register-interest form (20 November 2026) */
+.reg { background: var(--card); border: 2px solid var(--ink); border-radius: 18px; padding: 22px 20px; margin-top: 20px; max-width: 640px; }
+.reg .field { margin-top: 16px; }
+.reg .field label, .reg legend { display: block; font-weight: 800; margin-bottom: 6px; }
+.reg .opt, .reg .hint { font-weight: 400; color: var(--muted); }
+.reg p.hint { font-size: 15px; margin: 6px 0 0; }
+.reg input[type=text], .reg input[type=email], .reg input[type=tel], .reg select, .reg textarea { width: 100%; box-sizing: border-box; font: inherit; color: var(--fg); background: var(--bg); border: 2px solid var(--muted); border-radius: 12px; padding: 11px 13px; min-height: 48px; }
+.reg textarea { min-height: 96px; resize: vertical; }
+.reg input:focus-visible, .reg select:focus-visible, .reg textarea:focus-visible { outline: 3px solid var(--leaf); outline-offset: 1px; }
+.reg fieldset { border: 0; padding: 0; margin: 16px 0 0; }
+.reg .choices { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.reg .choices label, .reg .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 600; min-height: 44px; }
+.reg .check { margin-top: 16px; }
+.reg input[type=radio], .reg input[type=checkbox] { width: 22px; height: 22px; margin-top: 2px; flex: none; accent-color: var(--leaf-dark); }
+.reg .err { display: none; color: #A32D2D; font-weight: 700; font-size: 15px; margin-top: 4px; }
+.reg .field.bad .err { display: block; }
+.reg .field.bad input { border-color: #A32D2D; }
+.reg button.btn { border: 0; cursor: pointer; font-family: inherit; margin-top: 20px; }
+.reg button.btn:disabled { opacity: .7; cursor: wait; }
+.reg .form-err { color: #A32D2D; font-weight: 700; margin-top: 12px; }
+.reg .small { font-size: 15px; color: var(--muted); margin-top: 14px; }
+.reg .small a, .reg .form-err a { color: inherit; }
+.reg .done { display: none; }
+.reg.sent .form-body { display: none; }
+.reg.sent .done { display: block; }
+.reg .done p { margin-top: 10px; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .reg .err, :root:not([data-theme="light"]) .reg .form-err { color: #FF9C9C; } }
 </style>
 <style>
 /* Shared top banner, the same look as the ZooSay app (owner request, 11 November 2026). */
@@ -271,7 +298,7 @@ footer .brand svg { width: 36px; }
     <h1>Consumer audits with <em>UK adults.</em></h1>
     <p class="lead">Build a consumer audit, fund it with Pre-funded Research Credits, and review every response before it counts. Members are UK adults aged 18 and over.</p>
     <div class="cta-row">
-      <a class="btn" href="mailto:help@zoosay.co.uk">Talk to us</a>
+      <a class="btn" href="#register-interest">Register your interest</a>
       <a class="btn ghost" href="#how">How it works</a>
     </div>
     <div class="ticker" aria-hidden="true"><div class="ticker-track"><span>Pre-funded credits</span><span>14-day review</span><span>Pause any time</span><span>Free training</span><span>UK members only</span><span>No selfies</span><span>Pre-funded credits</span><span>14-day review</span><span>Pause any time</span><span>Free training</span><span>UK members only</span><span>No selfies</span></div></div>
@@ -451,6 +478,72 @@ footer .brand svg { width: 36px; }
     
   </section>
 
+  <section class="sec" id="register-interest" aria-labelledby="register-h">
+    <span class="label-tag">No commitment</span>
+    <h2 id="register-h">Register your interest</h2>
+    <p class="sub">Businesses and charities that register before we open can become founding businesses, with the price per response locked for 12 months from sign-up. Registering is free and does not commit you to anything.</p>
+    <form class="reg" novalidate data-reg>
+      <div class="form-body">
+        <div class="field">
+          <label for="r-name">Your name</label>
+          <input id="r-name" name="name" type="text" autocomplete="name" maxlength="100" required>
+          <p class="err">Enter your name.</p>
+        </div>
+        <div class="field">
+          <label for="r-title">Job title <span class="opt">(optional)</span></label>
+          <input id="r-title" name="job_title" type="text" autocomplete="organization-title" maxlength="100">
+        </div>
+        <div class="field">
+          <label for="r-org">Business or charity name</label>
+          <input id="r-org" name="company" type="text" autocomplete="organization" maxlength="150" required>
+          <p class="err">Enter the name of your business or charity.</p>
+        </div>
+        <div class="field">
+          <label for="r-type">What kind of organisation? <span class="opt">(optional)</span></label>
+          <select id="r-type" name="organisation_type">
+            <option value="">Choose…</option>
+            <option value="business">A business with its own products or services</option>
+            <option value="agency">A marketing, design or research agency</option>
+            <option value="charity">A charity</option>
+            <option value="shop_hospitality">A shop, café, restaurant or venue</option>
+            <option value="other">Something else</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="r-email">Work email</label>
+          <input id="r-email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="name@company.co.uk" maxlength="254" required>
+          <p class="err">Enter an email address, like name@company.co.uk.</p>
+        </div>
+        <div class="field">
+          <label for="r-phone">Phone <span class="opt">(optional)</span></label>
+          <input id="r-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="01234 567890">
+          <p class="hint">A UK landline or mobile.</p>
+          <p class="err">Enter a UK phone number, like 01234 567890 or 07700 900123, or leave it blank.</p>
+        </div>
+        <fieldset class="field" id="r-best-field">
+          <legend>Best way to contact you</legend>
+          <div class="choices">
+            <label><input type="radio" name="preferred_contact" value="email" checked> Email</label>
+            <label><input type="radio" name="preferred_contact" value="phone"> Phone</label>
+          </div>
+          <p class="err">Add a phone number above, or choose email.</p>
+        </fieldset>
+        <div class="field">
+          <label for="r-msg">Anything you would like us to know? <span class="opt">(optional)</span></label>
+          <textarea id="r-msg" name="message" maxlength="2000"></textarea>
+        </div>
+        <label class="check"><input type="checkbox" name="marketing"><span>Yes, send me more information about ZooSay by email, including when we open. You can stop at any time.</span></label>
+        <button class="btn" type="submit">Register my interest</button>
+        <p class="form-err" role="alert" data-form-err hidden></p>
+        <p class="small">There is no commitment and nothing to pay. We use these details to contact you about ZooSay and delete them if you ask. See our <a href="privacy.html">privacy notice</a>.</p>
+      </div>
+      <div class="done" role="status" tabindex="-1">
+        <p><strong>Thank you, you have registered your interest.</strong> There is no commitment. We will be in touch before we open.</p>
+        <p>We have sent a confirmation to your email. If you cannot see it, check your junk or spam folder.</p>
+      </div>
+    </form>
+  </section>
+
   <section class="sec" aria-labelledby="faq">
     <span class="label-tag">Questions</span>
     <h2 id="faq">Questions</h2>
@@ -470,7 +563,7 @@ footer .brand svg { width: 36px; }
   <div class="wrap">
     <h2>Talk to us about a consumer audit</h2>
     <p>We will explain how it works for your question.</p>
-    <div class="cta-row"><a class="btn" href="mailto:help@zoosay.co.uk">Talk to us</a></div>
+    <div class="cta-row"><a class="btn" href="#register-interest">Register your interest</a> <a class="btn" href="mailto:help@zoosay.co.uk">Talk to us</a></div>
     <p class="small">Read the Business Terms before you buy Pre-funded Research Credits. Email help@zoosay.co.uk.</p>
   </div>
 </section>
@@ -486,6 +579,148 @@ footer .brand svg { width: 36px; }
     ZooSay™ is a trading name of SE BULMER LTD, established in 2023. Registered in England and Wales, company number 14690326. ICO registration ZC268776. Registered office: 128 City Road, London, EC1V 2NX.
   </footer>
 </div>
+<script>
+/*
+  Register-interest form (owner request, 20 November 2026). Sends to the same live
+  sign-up service as the front page (docs/live-waitlist.md in the app repository),
+  as a business entry with register_interest=true. Arriving from a ZooSay email
+  (?from=email) is recorded as how they heard about us.
+*/
+(function () {
+  var ENDPOINT = "https://zoosay-live-waitlist.onrender.com/api/waitlist";
+  var WAKE = "https://zoosay-live-waitlist.onrender.com/holding";
+  var CONTACT = "help@zoosay.co.uk";
+  var form = document.querySelector("[data-reg]");
+  if (!form) { return; }
+  var wake = function () { try { fetch(WAKE, { mode: "no-cors", cache: "no-store" }).catch(function () {}); } catch (e) {} };
+  wake();
+  var fromEmail = /[?&]from=email\b/.test(location.search);
+  var emailOk = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
+  var phoneOk = function (v) {
+    var d = v.replace(/[\s().-]/g, "");
+    if (/^\+44/.test(d)) { d = d.slice(3); } else if (/^0044/.test(d)) { d = d.slice(4); } else if (/^0/.test(d)) { d = d.slice(1); } else { return false; }
+    if (d.charAt(0) === "0") { d = d.slice(1); }
+    return /^[1237]\d{9}$/.test(d) && !/^(1481|1534|1624|7624|70|76)/.test(d);
+  };
+  var toForm = function (data) {
+    return Object.keys(data).map(function (k) {
+      var v = data[k];
+      v = v === true ? "true" : (v === false || v == null ? "" : String(v));
+      return encodeURIComponent(k) + "=" + encodeURIComponent(v);
+    }).join("&");
+  };
+  var sendByBrowser = function (data) {
+    var f = document.createElement("form");
+    f.method = "POST"; f.action = ENDPOINT; f.style.display = "none";
+    data.page = "1";
+    Object.keys(data).forEach(function (k) {
+      var i = document.createElement("input");
+      var v = data[k];
+      i.type = "hidden"; i.name = k; i.value = v === true ? "true" : (v === false || v == null ? "" : String(v));
+      f.appendChild(i);
+    });
+    document.body.appendChild(f);
+    f.submit();
+  };
+  var setBad = function (el, bad) {
+    var f = el.closest(".field");
+    if (f) { f.classList.toggle("bad", bad); }
+    if (el.setAttribute) { el.setAttribute("aria-invalid", bad ? "true" : "false"); }
+  };
+  form.querySelectorAll("input,textarea,select").forEach(function (i) {
+    i.addEventListener("input", function () { setBad(i, false); setBad(document.getElementById("r-best-field"), false); });
+  });
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var el = form.elements;
+    var firstBad = null;
+    var check = function (input, ok) { setBad(input, !ok); if (!ok && !firstBad) { firstBad = input; } };
+    var name = el.name.value.trim();
+    var org = el.company.value.trim();
+    var email = el.email.value.trim();
+    var phone = el.phone.value.trim();
+    var best = (form.querySelector("input[name=preferred_contact]:checked") || {}).value || "email";
+    check(el.name, name !== "");
+    check(el.company, org !== "");
+    check(el.email, emailOk(email));
+    check(el.phone, phone === "" || phoneOk(phone));
+    var bestField = document.getElementById("r-best-field");
+    var bestOk = best !== "phone" || phone !== "";
+    bestField.classList.toggle("bad", !bestOk);
+    if (!bestOk && !firstBad) { firstBad = form.querySelector("input[name=preferred_contact][value=phone]"); }
+    if (firstBad) { firstBad.focus(); return; }
+
+    var data = {
+      audience: "business",
+      register_interest: true,
+      contact_name: name,
+      job_title: el.job_title.value.trim(),
+      company: org,
+      organisation_type: el.organisation_type.value,
+      email: email,
+      phone: phone,
+      preferred_contact: best,
+      message: el.message.value.trim(),
+      marketing_opt_in: el.marketing.checked
+    };
+    if (fromEmail) { data.channel = "zoosay_email"; }
+
+    var errBox = form.querySelector("[data-form-err]");
+    var showErr = function (text) {
+      errBox.textContent = text + " If it keeps happening, email ";
+      var a = document.createElement("a");
+      a.href = "mailto:" + CONTACT; a.textContent = CONTACT;
+      errBox.appendChild(a);
+      errBox.appendChild(document.createTextNode("."));
+      errBox.hidden = false;
+    };
+    errBox.hidden = true;
+    var attempt = function () {
+      var ctrl = window.AbortController ? new AbortController() : null;
+      var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, 90000) : null;
+      return fetch(ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: toForm(data),
+        signal: ctrl ? ctrl.signal : undefined
+      }).then(function (r) {
+        if (timer) { clearTimeout(timer); }
+        return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, body: j }; });
+      }, function () { if (timer) { clearTimeout(timer); } return { status: 0, body: {} }; });
+    };
+    var btn = form.querySelector("button[type=submit]");
+    var label = btn.textContent;
+    btn.disabled = true; btn.textContent = "Sending…";
+    var slow = setTimeout(function () { btn.textContent = "Still sending, please wait…"; }, 6000);
+    var tries = 0;
+    var run = function () {
+      tries += 1;
+      return attempt().then(function (res) {
+        if (!(res.status === 0 || res.status >= 500) || tries >= 3) { return res; }
+        wake();
+        return new Promise(function (ok) { setTimeout(ok, 5000); }).then(run);
+      });
+    };
+    run().then(function (res) {
+      clearTimeout(slow);
+      if (res.status >= 200 && res.status < 300 && res.body && res.body.ok) {
+        form.classList.add("sent");
+        var done = form.querySelector(".done");
+        if (done) { done.focus(); }
+      } else if (res.status === 400 && res.body && res.body.error) {
+        showErr(res.body.error);
+      } else if (res.status === 429) {
+        showErr("Too many sign-ups from this connection. Please try again later.");
+      } else if (res.status === 0) {
+        sendByBrowser(data);
+        return;
+      } else {
+        showErr("Sorry, that did not go through. Please try again in a minute.");
+      }
+    }).then(function () { btn.disabled = false; btn.textContent = label; });
+  });
+})();
+</script>
 <!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "8c4169f707d84a4e825f8dcf7514cf69"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

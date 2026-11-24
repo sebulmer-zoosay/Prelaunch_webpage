@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Stop emails | ZooSay™</title>
+<style>
+body{margin:0;background:#F7FBF2;color:#173B24;font-family:Nunito,"Segoe UI",system-ui,sans-serif;font-size:18px;line-height:1.6}
+main{max-width:34rem;margin:0 auto;padding:48px 20px}
+h1{font-size:30px;line-height:1.2;margin:0 0 16px;color:#0F4A2A}
+button{font:inherit;font-weight:800;background:#0F4A2A;color:#fff;border:0;border-radius:999px;padding:12px 28px;min-height:48px;cursor:pointer}
+button:focus-visible{outline:3px solid #2E9E4F;outline-offset:2px}
+a{color:#1C7A3A}.small{font-size:15px;color:#56705F;margin-top:28px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Stop emails from ZooSay™</h1>
+  <div id="ask">
+    <p>Press the button and we will not email this address again.</p>
+    <form method="post" action="https://zoosay-live-waitlist.onrender.com/api/outreach/stop">
+      <input type="hidden" name="c" id="code" value="">
+      <button type="submit">Stop emails</button>
+    </form>
+  </div>
+  <p id="bad" hidden>This link is not complete. Please use the link from our email, or reply to it with "stop" and we will not email you again.</p>
+  <p class="small">ZooSay™ is a trading name of SE BULMER LTD, registered in England and Wales, company number 14690326. Registered office: 128 City Road, London, EC1V 2NX.</p>
+</main>
+<script>
+(function () {
+  var m = location.search.match(/[?&]c=([A-Za-z0-9]{10,24})\b/);
+  if (m) { document.getElementById("code").value = m[1]; }
+  else { document.getElementById("ask").hidden = true; document.getElementById("bad").hidden = false; }
+  try { fetch("https://zoosay-live-waitlist.onrender.com/holding", { mode: "no-cors", cache: "no-store" }).catch(function () {}); } catch (e) {}
+})();
+</script>
+</body>
+</html>

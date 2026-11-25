@@ -584,7 +584,8 @@ footer .brand svg { width: 36px; }
   Register-interest form (owner request, 20 November 2026). Sends to the same live
   sign-up service as the front page (docs/live-waitlist.md in the app repository),
   as a business entry with register_interest=true. Arriving from a ZooSay email
-  (?from=email) is recorded as how they heard about us.
+  (?from=email) or a ZooSay LinkedIn post (?from=linkedin) is recorded as how they
+  heard about us.
 */
 (function () {
   var ENDPOINT = "https://zoosay-live-waitlist.onrender.com/api/waitlist";
@@ -595,6 +596,7 @@ footer .brand svg { width: 36px; }
   var wake = function () { try { fetch(WAKE, { mode: "no-cors", cache: "no-store" }).catch(function () {}); } catch (e) {} };
   wake();
   var fromEmail = /[?&]from=email\b/.test(location.search);
+  var fromLinkedIn = /[?&]from=linkedin\b/.test(location.search);
   var emailOk = function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); };
   var phoneOk = function (v) {
     var d = v.replace(/[\s().-]/g, "");
@@ -664,6 +666,7 @@ footer .brand svg { width: 36px; }
       marketing_opt_in: el.marketing.checked
     };
     if (fromEmail) { data.channel = "zoosay_email"; }
+    else if (fromLinkedIn) { data.channel = "linkedin"; }
 
     var errBox = form.querySelector("[data-form-err]");
     var showErr = function (text) {
